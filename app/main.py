@@ -3,6 +3,7 @@ import os
 import sys
 from fastapi import FastAPI
 from sqlmodel import SQLModel
+from prometheus_fastapi_instrumentator import Instrumentator
 import json
 from typing import Dict, Any
 from app.database import engine
@@ -24,7 +25,7 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan,
 )
-
+Instrumentator().instrument(app).expose(app, endpoint="/metrics")
 app.include_router(items_router)
 
 
